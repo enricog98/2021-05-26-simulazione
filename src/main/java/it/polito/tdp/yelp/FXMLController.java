@@ -5,6 +5,7 @@
 package it.polito.tdp.yelp;
 
 import java.net.URL;
+import java.time.Year;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.yelp.model.Model;
@@ -35,13 +36,13 @@ public class FXMLController {
     private Button btnPercorso; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbCitta"
-    private ComboBox<?> cmbCitta; // Value injected by FXMLLoader
+    private ComboBox<String> cmbCitta; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtX"
     private TextField txtX; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbAnno"
-    private ComboBox<?> cmbAnno; // Value injected by FXMLLoader
+    private ComboBox<Year> cmbAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbLocale"
     private ComboBox<?> cmbLocale; // Value injected by FXMLLoader
@@ -56,12 +57,32 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	String città = this.cmbCitta.getValue();
+    	Year anno = this.cmbAnno.getValue();
+    	
+    	if(città==null || anno==null) {
+    		this.txtResult.appendText("Seleziona una città ed un anno!\n");
+    		return ;
+    	}
+    	
+    	String message = this.model.creaGrafo(città, anno);
+    	this.txtResult.appendText(message);
     }
 
     @FXML
     void doLocaleMigliore(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	String città = this.cmbCitta.getValue();
+    	Year anno = this.cmbAnno.getValue();
+    	
+    	if(città==null || anno==null) {
+    		this.txtResult.appendText("Seleziona una città ed un anno!\n");
+    		return ;
+    	}
+    	
+    	String message = this.model.trovaCittàMigliore(città, anno);
+    	this.txtResult.appendText(message);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -78,5 +99,10 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	
+    	this.cmbCitta.getItems().addAll(this.model.getCities());
+   		
+    	for(int anno=2005; anno<=2013; anno++)
+   			this.cmbAnno.getItems().add(Year.of(anno));
     }
 }

@@ -62,7 +62,7 @@ public class Model {
 	}	
 	
 	public List<String> getCities() {
-		return this.dao.getAllCities();
+		return dao.getAllCities();
 	}
 
 }
